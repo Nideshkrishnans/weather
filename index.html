@@ -14,6 +14,12 @@
     <link rel="stylesheet" href="./style.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <div class="row" style="width: 100%;">
@@ -54,14 +60,14 @@
                         <div class="row mb-3">
                             <p>Weather Details</p>
                             <div class="col-md-3 ">
-                                <div class="card text-center pt-2 sbox text-light">
+                                <div class="card text-center pt-2  sbox text-light">
                                     <i class="fa-solid fa-temperature-three-quarters"></i>
                                     <h5>Feels like</h5>
                                     <h6 class="feelslike"></h6>
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <div class="card text-center pt-2 sbox text-light">
+                                <div class="card text-center pt-2 mt-3 mt-md-0 sbox text-light">
                                     <i class="fa-solid fa-eye"></i>
                                     <h5>Visibility</h5>
                                     <h6 class="visibility"></h6>
@@ -69,14 +75,14 @@
                             </div>
                             <div class="col-md-3">
                               
-                                <div class="card text-center pt-2 sbox text-light">
+                                <div class="card text-center pt-2 mt-3 mt-md-0 sbox text-light">
                                     <i class="fa-solid fa-sink"></i>
                                     <h5>Pressure</h5>
                                     <h6 class="pressure"></h6>
                                 </div>
                             </div>
                             <div class="col-md-3 ">
-                                <div class="card text-center pt-2 sbox text-light">
+                                <div class="card text-center pt-2 mt-3 mt-md-0 sbox text-light">
                                     <i class="fa-solid fa-gear "></i>
                                     <h5>UV</h5>
                                     <h6>--</h6>
@@ -86,11 +92,11 @@
                         <div class="row"><p>Sunset & Sunrise</p></div>
                         <div class="row imagebox mb-3">
                                 <div style="height: 150px;" id="setrise" class="col-md-8 d-flex justify-content-between">
-                                    <h6 class="hoxoc">sunrise:<span class="rtime"></span></h6>
-                                    <h6 class="hoxoc">sunset: <span class="stime"></span></h6>
+                                    <h6 class="hoxoc ">sunrise   <span class="rtime"></span></h6>
+                                    <h6 class="hoxoc text-light">sunset    <span class="stime"></span></h6>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-4 mt-3 mt-md-0 ">
                                     <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                           <div class="carousel-item active">
@@ -117,7 +123,7 @@
                         
 
                         <div class="row mb-1">
-                            <div class="col-md-3">
+                            <div class="col-md-3 mt-3 mt-md-0">
                                 <div class="card-body">
                                     <div class="row">
                                         <img src="https://media4.giphy.com/media/XAxJJFihRVjRxr529J/giphy.gif?cid=6c09b952h5pqzg3xi5vk0nfekxgoknh9spbdjoqxhtu3w0z5&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=s" alt="">
@@ -125,9 +131,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-1"></div>
+                            <div class="col-md-1 "></div>
 
-                            <div class="col-md-7 card mt-2 ml-2 bbox text-light d-flex align-items-center justify-content-center"> 
+                            <div class="col-md-7 mt-3 mt-md-0 card mt-2 ml-2 bbox text-light d-flex align-items-center justify-content-center"> 
                                 <h1 id="result" class=""></h1>
                             </div>
 
@@ -179,7 +185,25 @@
     const search = async()=>{
         const data = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${wcity.value}&appid=93d6390ce82bdef573de7a879ec53bf6&units=metric`)
         data.json().then((Response)=>{
-            console.log(Response);
+            //console.log(Response);
+
+            const sunriseTimestamp = Response.sys.sunrise; // Example Unix timestamp
+            const datet = new Date(sunriseTimestamp * 1000);
+            const hourss = datet.getHours().toString().padStart(2, '0');
+            const minutess = datet.getMinutes().toString().padStart(2, '0');
+            const secondss = datet.getSeconds().toString().padStart(2, '0');
+
+            const sunriseTime = `${hourss}:${minutess}:${secondss}`;
+            //console.log(sunriseTime);
+
+            const sunsetTimestamp = Response.sys.sunset; // Example Unix timestamp
+            const date = new Date(sunsetTimestamp * 1000);
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            const seconds = date.getSeconds().toString().padStart(2, '0');
+
+            const sunsetTime = `${hours}:${minutes}:${seconds}`;
+            //console.log(sunsetTime);
 
             document.querySelector(".city").innerHTML=Response.name;
             document.querySelector(".temp").innerHTML=Response.main.temp + "°C";
@@ -190,9 +214,8 @@
             document.querySelector(".feelslike").innerHTML=Response.main.feels_like + "°C";
             document.querySelector(".visibility").innerHTML=Response.visibility + "m";
             document.querySelector(".pressure").innerHTML=Response.main.pressure + "hPa";
-            document.querySelector(".rtime").innerHTML=Response.sys.sunrise;
-            document.querySelector(".stime").innerHTML=Response.sys.sunset;
-
+            document.querySelector(".rtime").innerHTML=`${sunriseTime}`;
+            document.querySelector(".stime").innerHTML=`${sunsetTime}`;
 
 
             if (Response.weather[0].main=='Clouds') {
